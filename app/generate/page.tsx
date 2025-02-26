@@ -208,10 +208,6 @@ export default function GenerateContent() {
     }
   };
 
-  const selectChangeHandler = () => {
-      setContentType(contentType);
-      setPrompt("");
-  }
 
   const handleHistoryItemClick = (item: HistoryItem) => {
     setSelectedHistoryItem(item);

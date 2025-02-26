@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "No Stripe signature" }, { status: 400 });
   }
 
-  let event: Stripe.Event;
+   let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(
@@ -27,15 +27,23 @@ export async function POST(req: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
-  } catch (err: any) {
-    console.error(`Webhook signature verification failed: ${err.message}`);
-    return NextResponse.json(
-      { error: `Webhook Error: ${err.message}` },
-      { status: 400 }
-    );
+  } catch (err: unknown) {
+
+    if (err instanceof Error) {
+      console.error(`Webhook signature verification failed: ${err.message}`);
+      return NextResponse.json(
+        { error: `Webhook Error: ${err.message}` },
+        { status: 400 }
+      );
+
+    } else {
+      console.error(`Webhook signature verification failed: ${err}`);
+    }
+
+   
   }
 
-  console.log(`Received event type: ${event.type}`);
+   console.log(`Received event type: ${event.type}`);
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
@@ -109,12 +117,19 @@ export async function POST(req: Request) {
       await updateUserPoints(userId, pointsToAdd);
 
       console.log(`Successfully processed subscription for user ${userId}`);
-    } catch (error: any) {
-      console.error("Error processing subscription:", error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+
+        console.error("Error processing subscription:", error);
       return NextResponse.json(
         { error: "Error processing subscription", details: error.message },
         { status: 500 }
       );
+      } else {
+        console.error("Error processing subscription:", error);
+
+      }
+      
     }
   }
 

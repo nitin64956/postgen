@@ -26,11 +26,16 @@ export async function POST(req: Request) {
       client_reference_id: userId,
     });
     return NextResponse.json({ sessionId: session.id });
-  } catch (error: any) {
-    console.error("Error creating checkout session:", error);
-    return NextResponse.json(
-      { error: "Error creating checkout session", details: error.message },
-      { status: 500 }
-    );
+  } catch (error:unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: "Error creating checkout session", details: error.message },
+        { status: 500 }
+      );
+    } else {
+      console.error("Error creating checkout session:", error);
+    }
+    
+    
   }
 }

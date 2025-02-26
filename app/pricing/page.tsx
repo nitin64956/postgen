@@ -120,7 +120,7 @@ export default function PricingPage() {
                 ))}
               </ul>
               <Button
-                onClick={(e) => plan.priceId && handleSubscribe(plan.priceId)}
+                onClick={() => plan.priceId && handleSubscribe(plan.priceId)}
                 disabled={isLoading || !plan.priceId}
                 className="w-full bg-white text-black hover:bg-gray-200"
               >
