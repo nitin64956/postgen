@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "No Stripe signature" }, { status: 400 });
   }
 
-   let event: Stripe.Event;
+   let event: Stripe.Event | undefined;
 
   try {
     event = stripe.webhooks.constructEvent(
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
    
   }
 
-   console.log(`Received event type: ${event.type}`);
+  console.log(`Received event type: ${event.type}`);
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
