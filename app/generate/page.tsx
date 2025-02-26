@@ -328,6 +328,9 @@ export default function GenerateContent() {
                   <p className="text-2xl font-bold text-yellow-400">
                     {userPoints !== null ? userPoints : "Loading..."}
                   </p>
+                  <p className="text-sm text-red-400">
+                    {(userPoints !== null && (userPoints < POINTS_PER_GENERATION)) ? "Points available very low" : ""}
+                  </p>
                 </div>
               </div>
               <Button className="bg-blue-600 hover:bg-blue-700 text-white text-sm py-2 px-4 rounded-full transition-colors">
